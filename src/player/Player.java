@@ -3,14 +3,11 @@
  */
 package player;
 
-import java.util.List;
-
 /**
  * @author maddox
  *
  */
 public class Player {
-	private int id;
 	private String name;
 	private int win = 0;
 	private int loss = 0;
@@ -71,6 +68,13 @@ public class Player {
 		this.name = name;
 	}
 	
+	public Player(int rating, int win, int loss, int draw) {
+		this.rating = rating;
+		this.win = win;
+		this.loss = loss;
+		this.draw = draw;
+	}
+
 	public double calcK(double Ne, int m) {
 		return (double) 800 / (Ne + m); 
 	}
