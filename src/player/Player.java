@@ -90,7 +90,8 @@ public class Player {
 				+ m*this.averageArray(r)
 				+ (wNew - lNew)*400 
 				) / (this.getTotalGames()+m) ;
-		return (int) Math.round(rPost);
+		rPost = Math.round(rPost);
+		return (int) Math.max(100, (int) rPost); // can't have less than 100
 	}
 	
 	private int sumArray(int[] list) {

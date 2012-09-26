@@ -80,5 +80,14 @@ public class PlayerTest extends TestCase{
 		this.assertEquals(1.0, this.player.calcWinExpectancy(opponents));
 		this.assertEquals(1000, this.player.calcEffectiveRating(opponents, win, loss));
 	}
+	
+	@Test
+	public void testRatingFloor() {
+		Player newPlayer = new Player(0,0,0,0);
+		int[] r = {0};
+		int w = 0;
+		int l = 1;
+		this.assertEquals(100, newPlayer.calcProvisionalRating(r, w, l));
+	}
 
 }
