@@ -11,6 +11,10 @@ import player.Player;
 public class ELOCalculatorCLI {
 
 	/**
+	 * Required arguments: 
+	 * 		-r=X,Y,Z comma delimited list of opponent ratings for each game played 
+	 * 		-w=X -l=X number of wins , number of losses
+	 * 		-p=A,B,C,D comma delimited list of original player rating,wins,losses,draws
 	 * @param args
 	 */
 	public static void main(String[] args) {
