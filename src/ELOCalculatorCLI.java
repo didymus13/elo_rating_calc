@@ -66,12 +66,12 @@ public class ELOCalculatorCLI {
 			
 			Player player = new Player(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
 			player.applyResults(ratings, win, loss);
-			System.out.printf("Rating: %d\nWin: %d\nLoss: %d\nDraw: %d\nTotal Games: %d\n"
+			System.out.printf("\nRating: %d\nWin: %d\nLoss: %d\nDraw: %d\nTotal Games: %d\n"
 					, player.getRating(), player.getWin(), player.getLoss()
 					, player.getDraw(), player.getTotalGames());
 			
-			if (!runIt || in.readLine("\nProcess another (Y/n)? ").equals(("n"))); {
-				System.out.println("Thank you");
+			if (!runIt || in.readLine("\nProcess another (Y/n)? ").equals(("n"))) {
+				System.out.println("\nThank you.\n");
 				runIt = false; 
 			}
 		}
