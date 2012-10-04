@@ -74,11 +74,15 @@ public class PlayerTest extends TestCase{
 	@Test
 	public void testEstablishedRating() {
 		this.assertTrue(this.player.isEstablished());
+		this.assertEquals(26, this.player.getTotalGames());
 		int[] opponents = {1000, 1000};
 		int win = 1;
 		int loss = 1;
 		this.assertEquals(1.0, this.player.calcWinExpectancy(opponents));
 		this.assertEquals(1000, this.player.calcEffectiveRating(opponents, win, loss));
+		
+		this.player.applyResults(opponents, win, loss);
+		
 	}
 	
 	@Test

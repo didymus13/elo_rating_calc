@@ -14,8 +14,22 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
+
+import player.Player;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class ELOCalculatorGUI {
@@ -30,11 +44,12 @@ public class ELOCalculatorGUI {
 	private JTextField opponentRating3;
 	private JTextField opponentRating4;
 	private JTextField opponentRating5;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 	private final ButtonGroup buttonGroup_2 = new ButtonGroup();
 	private final ButtonGroup buttonGroup_3 = new ButtonGroup();
 	private final ButtonGroup buttonGroup_4 = new ButtonGroup();
+	private final ButtonGroup buttonGroup_5 = new ButtonGroup();
+	private final Action action = new SwingAction();
 
 	/**
 	 * Launch the application.
@@ -98,7 +113,7 @@ public class ELOCalculatorGUI {
 		GridBagConstraints gbc_lblW = new GridBagConstraints();
 		gbc_lblW.insets = new Insets(0, 0, 5, 5);
 		gbc_lblW.gridx = 6;
-		gbc_lblW.gridy = 0;
+		gbc_lblW.gridy = 0; 
 		frame.getContentPane().add(lblW, gbc_lblW);
 		
 		JLabel lblD = DefaultComponentFactory.getInstance().createTitle("D");
@@ -135,7 +150,7 @@ public class ELOCalculatorGUI {
 		gbc_lblPlayerRating.gridy = 1;
 		frame.getContentPane().add(lblPlayerRating, gbc_lblPlayerRating);
 		
-		JLabel newPlayerRating = DefaultComponentFactory.getInstance().createLabel("0");
+		final JLabel newPlayerRating = DefaultComponentFactory.getInstance().createLabel("0");
 		newPlayerRating.setToolTipText("New Rating");
 		GridBagConstraints gbc_newPlayerRating = new GridBagConstraints();
 		gbc_newPlayerRating.insets = new Insets(0, 0, 5, 5);
@@ -145,7 +160,6 @@ public class ELOCalculatorGUI {
 		
 		opponentRating1 = new JTextField();
 		opponentRating1.setHorizontalAlignment(SwingConstants.CENTER);
-		opponentRating1.setText("0");
 		opponentRating1.setToolTipText("Opponent Rating");
 		GridBagConstraints gbc_opponentRating1 = new GridBagConstraints();
 		gbc_opponentRating1.insets = new Insets(0, 0, 5, 5);
@@ -154,30 +168,33 @@ public class ELOCalculatorGUI {
 		frame.getContentPane().add(opponentRating1, gbc_opponentRating1);
 		opponentRating1.setColumns(5);
 		
-		JRadioButton rdbtnGameoutcome = new JRadioButton("");
-		buttonGroup.add(rdbtnGameoutcome);
+		final JRadioButton gameOutcome1Win = new JRadioButton("");
+		gameOutcome1Win.setActionCommand("1");
+		buttonGroup_1.add(gameOutcome1Win);
 		GridBagConstraints gbc_rdbtnGameoutcome = new GridBagConstraints();
 		gbc_rdbtnGameoutcome.insets = new Insets(0, 0, 5, 5);
 		gbc_rdbtnGameoutcome.gridx = 6;
 		gbc_rdbtnGameoutcome.gridy = 1;
-		frame.getContentPane().add(rdbtnGameoutcome, gbc_rdbtnGameoutcome);
+		frame.getContentPane().add(gameOutcome1Win, gbc_rdbtnGameoutcome);
 		
-		JRadioButton gameOutcome1 = new JRadioButton("");
-		buttonGroup.add(gameOutcome1);
+		JRadioButton gameOutcome1Draw = new JRadioButton("");
+		gameOutcome1Draw.setActionCommand("1");
+		buttonGroup_1.add(gameOutcome1Draw);
 		GridBagConstraints gbc_gameOutcome1 = new GridBagConstraints();
 		gbc_gameOutcome1.insets = new Insets(0, 0, 5, 5);
 		gbc_gameOutcome1.gridx = 7;
 		gbc_gameOutcome1.gridy = 1;
-		frame.getContentPane().add(gameOutcome1, gbc_gameOutcome1);
+		frame.getContentPane().add(gameOutcome1Draw, gbc_gameOutcome1);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("");
-		buttonGroup.add(rdbtnNewRadioButton);
+		final JRadioButton gameOutcome1Loss = new JRadioButton("");
+		gameOutcome1Loss.setActionCommand("1");
+		buttonGroup_1.add(gameOutcome1Loss);
 		GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
 		gbc_rdbtnNewRadioButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_rdbtnNewRadioButton.insets = new Insets(0, 0, 5, 0);
 		gbc_rdbtnNewRadioButton.gridx = 8;
 		gbc_rdbtnNewRadioButton.gridy = 1;
-		frame.getContentPane().add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
+		frame.getContentPane().add(gameOutcome1Loss, gbc_rdbtnNewRadioButton);
 		
 		playerWin = new JTextField();
 		playerWin.setHorizontalAlignment(SwingConstants.CENTER);
@@ -199,7 +216,7 @@ public class ELOCalculatorGUI {
 		gbc_lblWin.gridy = 2;
 		frame.getContentPane().add(lblWin, gbc_lblWin);
 		
-		JLabel newPlayerWin = DefaultComponentFactory.getInstance().createLabel("0");
+		final JLabel newPlayerWin = DefaultComponentFactory.getInstance().createLabel("0");
 		newPlayerWin.setToolTipText("New Player Win Total");
 		GridBagConstraints gbc_newPlayerWin = new GridBagConstraints();
 		gbc_newPlayerWin.insets = new Insets(0, 0, 5, 5);
@@ -209,7 +226,6 @@ public class ELOCalculatorGUI {
 		
 		opponentRating2 = new JTextField();
 		opponentRating2.setToolTipText("Opponent Rating");
-		opponentRating2.setText("0");
 		opponentRating2.setHorizontalAlignment(SwingConstants.CENTER);
 		opponentRating2.setColumns(5);
 		GridBagConstraints gbc_opponentRating2 = new GridBagConstraints();
@@ -218,29 +234,32 @@ public class ELOCalculatorGUI {
 		gbc_opponentRating2.gridy = 2;
 		frame.getContentPane().add(opponentRating2, gbc_opponentRating2);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("");
-		buttonGroup_1.add(rdbtnNewRadioButton_1);
+		final JRadioButton gameOutcome2Win = new JRadioButton("");
+		gameOutcome2Win.setActionCommand("1");
+		buttonGroup_2.add(gameOutcome2Win);
 		GridBagConstraints gbc_rdbtnNewRadioButton_1 = new GridBagConstraints();
 		gbc_rdbtnNewRadioButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_rdbtnNewRadioButton_1.gridx = 6;
 		gbc_rdbtnNewRadioButton_1.gridy = 2;
-		frame.getContentPane().add(rdbtnNewRadioButton_1, gbc_rdbtnNewRadioButton_1);
+		frame.getContentPane().add(gameOutcome2Win, gbc_rdbtnNewRadioButton_1);
 		
-		JRadioButton radioButton = new JRadioButton("");
-		buttonGroup_1.add(radioButton);
+		JRadioButton gameOutcome2Draw = new JRadioButton("");
+		gameOutcome2Draw.setActionCommand("1");
+		buttonGroup_2.add(gameOutcome2Draw);
 		GridBagConstraints gbc_radioButton = new GridBagConstraints();
 		gbc_radioButton.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton.gridx = 7;
 		gbc_radioButton.gridy = 2;
-		frame.getContentPane().add(radioButton, gbc_radioButton);
+		frame.getContentPane().add(gameOutcome2Draw, gbc_radioButton);
 		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("");
-		buttonGroup_1.add(rdbtnNewRadioButton_2);
+		final JRadioButton gameOutcome2Loss = new JRadioButton("");
+		gameOutcome2Loss.setActionCommand("1");
+		buttonGroup_2.add(gameOutcome2Loss);
 		GridBagConstraints gbc_rdbtnNewRadioButton_2 = new GridBagConstraints();
 		gbc_rdbtnNewRadioButton_2.insets = new Insets(0, 0, 5, 0);
 		gbc_rdbtnNewRadioButton_2.gridx = 8;
 		gbc_rdbtnNewRadioButton_2.gridy = 2;
-		frame.getContentPane().add(rdbtnNewRadioButton_2, gbc_rdbtnNewRadioButton_2);
+		frame.getContentPane().add(gameOutcome2Loss, gbc_rdbtnNewRadioButton_2);
 		
 		playerLoss = new JTextField();
 		playerLoss.setHorizontalAlignment(SwingConstants.CENTER);
@@ -263,7 +282,7 @@ public class ELOCalculatorGUI {
 		gbc_lblLoss.gridy = 3;
 		frame.getContentPane().add(lblLoss, gbc_lblLoss);
 		
-		JLabel newPlayerLoss = DefaultComponentFactory.getInstance().createLabel("0");
+		final JLabel newPlayerLoss = DefaultComponentFactory.getInstance().createLabel("0");
 		newPlayerLoss.setToolTipText("New Loss Total");
 		GridBagConstraints gbc_newPlayerLoss = new GridBagConstraints();
 		gbc_newPlayerLoss.insets = new Insets(0, 0, 5, 5);
@@ -273,7 +292,6 @@ public class ELOCalculatorGUI {
 		
 		opponentRating3 = new JTextField();
 		opponentRating3.setToolTipText("Opponent Rating");
-		opponentRating3.setText("0");
 		opponentRating3.setHorizontalAlignment(SwingConstants.CENTER);
 		opponentRating3.setColumns(5);
 		GridBagConstraints gbc_opponentRating3 = new GridBagConstraints();
@@ -282,29 +300,32 @@ public class ELOCalculatorGUI {
 		gbc_opponentRating3.gridy = 3;
 		frame.getContentPane().add(opponentRating3, gbc_opponentRating3);
 		
-		JRadioButton radioButton_1 = new JRadioButton("");
-		buttonGroup_2.add(radioButton_1);
+		final JRadioButton gameOutcome3Win = new JRadioButton("");
+		gameOutcome3Win.setActionCommand("1");
+		buttonGroup_3.add(gameOutcome3Win);
 		GridBagConstraints gbc_radioButton_1 = new GridBagConstraints();
 		gbc_radioButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_1.gridx = 6;
 		gbc_radioButton_1.gridy = 3;
-		frame.getContentPane().add(radioButton_1, gbc_radioButton_1);
+		frame.getContentPane().add(gameOutcome3Win, gbc_radioButton_1);
 		
-		JRadioButton radioButton_2 = new JRadioButton("");
-		buttonGroup_2.add(radioButton_2);
+		JRadioButton gameOutcome3Draw = new JRadioButton("");
+		gameOutcome3Draw.setActionCommand("1");
+		buttonGroup_3.add(gameOutcome3Draw);
 		GridBagConstraints gbc_radioButton_2 = new GridBagConstraints();
 		gbc_radioButton_2.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_2.gridx = 7;
 		gbc_radioButton_2.gridy = 3;
-		frame.getContentPane().add(radioButton_2, gbc_radioButton_2);
+		frame.getContentPane().add(gameOutcome3Draw, gbc_radioButton_2);
 		
-		JRadioButton radioButton_3 = new JRadioButton("");
-		buttonGroup_2.add(radioButton_3);
+		final JRadioButton gameOutcome3Loss = new JRadioButton("");
+		gameOutcome3Loss.setActionCommand("1");
+		buttonGroup_3.add(gameOutcome3Loss);
 		GridBagConstraints gbc_radioButton_3 = new GridBagConstraints();
 		gbc_radioButton_3.insets = new Insets(0, 0, 5, 0);
 		gbc_radioButton_3.gridx = 8;
 		gbc_radioButton_3.gridy = 3;
-		frame.getContentPane().add(radioButton_3, gbc_radioButton_3);
+		frame.getContentPane().add(gameOutcome3Loss, gbc_radioButton_3);
 		
 		playerDraw = new JTextField();
 		playerDraw.setHorizontalAlignment(SwingConstants.CENTER);
@@ -326,7 +347,7 @@ public class ELOCalculatorGUI {
 		gbc_lblDraw.gridy = 4;
 		frame.getContentPane().add(lblDraw, gbc_lblDraw);
 		
-		JLabel newPlayerDraw = DefaultComponentFactory.getInstance().createLabel("0");
+		final JLabel newPlayerDraw = DefaultComponentFactory.getInstance().createLabel("0");
 		newPlayerDraw.setToolTipText("New Draw Total");
 		GridBagConstraints gbc_newPlayerDraw = new GridBagConstraints();
 		gbc_newPlayerDraw.insets = new Insets(0, 0, 5, 5);
@@ -336,7 +357,6 @@ public class ELOCalculatorGUI {
 		
 		opponentRating4 = new JTextField();
 		opponentRating4.setToolTipText("Opponent Rating");
-		opponentRating4.setText("0");
 		opponentRating4.setHorizontalAlignment(SwingConstants.CENTER);
 		opponentRating4.setColumns(5);
 		GridBagConstraints gbc_opponentRating4 = new GridBagConstraints();
@@ -345,36 +365,39 @@ public class ELOCalculatorGUI {
 		gbc_opponentRating4.gridy = 4;
 		frame.getContentPane().add(opponentRating4, gbc_opponentRating4);
 		
-		JRadioButton radioButton_4 = new JRadioButton("");
-		buttonGroup_3.add(radioButton_4);
+		final JRadioButton gameOutcome4Win = new JRadioButton("");
+		gameOutcome4Win.setActionCommand("1");
+		buttonGroup_4.add(gameOutcome4Win);
 		GridBagConstraints gbc_radioButton_4 = new GridBagConstraints();
 		gbc_radioButton_4.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_4.gridx = 6;
 		gbc_radioButton_4.gridy = 4;
-		frame.getContentPane().add(radioButton_4, gbc_radioButton_4);
+		frame.getContentPane().add(gameOutcome4Win, gbc_radioButton_4);
 		
-		JRadioButton radioButton_5 = new JRadioButton("");
-		buttonGroup_3.add(radioButton_5);
+		JRadioButton gameOutcome4Draw = new JRadioButton("");
+		gameOutcome4Draw.setActionCommand("1");
+		buttonGroup_4.add(gameOutcome4Draw);
 		GridBagConstraints gbc_radioButton_5 = new GridBagConstraints();
 		gbc_radioButton_5.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_5.gridx = 7;
 		gbc_radioButton_5.gridy = 4;
-		frame.getContentPane().add(radioButton_5, gbc_radioButton_5);
+		frame.getContentPane().add(gameOutcome4Draw, gbc_radioButton_5);
 		
-		JRadioButton radioButton_6 = new JRadioButton("");
-		buttonGroup_3.add(radioButton_6);
+		final JRadioButton gameOutcome4Loss = new JRadioButton("");
+		gameOutcome4Loss.setActionCommand("1");
+		buttonGroup_4.add(gameOutcome4Loss);
 		GridBagConstraints gbc_radioButton_6 = new GridBagConstraints();
 		gbc_radioButton_6.insets = new Insets(0, 0, 5, 0);
 		gbc_radioButton_6.gridx = 8;
 		gbc_radioButton_6.gridy = 4;
-		frame.getContentPane().add(radioButton_6, gbc_radioButton_6);
+		frame.getContentPane().add(gameOutcome4Loss, gbc_radioButton_6);
 		
-		JLabel playerTotalGames = DefaultComponentFactory.getInstance().createLabel("0");
-		GridBagConstraints gbc_playerTotalGames = new GridBagConstraints();
-		gbc_playerTotalGames.insets = new Insets(0, 0, 5, 5);
-		gbc_playerTotalGames.gridx = 1;
-		gbc_playerTotalGames.gridy = 5;
-		frame.getContentPane().add(playerTotalGames, gbc_playerTotalGames);
+//		final JLabel playerTotalGames = DefaultComponentFactory.getInstance().createLabel("0");
+//		GridBagConstraints gbc_playerTotalGames = new GridBagConstraints();
+//		gbc_playerTotalGames.insets = new Insets(0, 0, 5, 5);
+//		gbc_playerTotalGames.gridx = 1;
+//		gbc_playerTotalGames.gridy = 5;
+//		frame.getContentPane().add(playerTotalGames, gbc_playerTotalGames);
 		
 		JLabel lblNewJgoodiesLabel = DefaultComponentFactory.getInstance().createLabel("Total Games");
 		GridBagConstraints gbc_lblNewJgoodiesLabel = new GridBagConstraints();
@@ -383,7 +406,7 @@ public class ELOCalculatorGUI {
 		gbc_lblNewJgoodiesLabel.gridy = 5;
 		frame.getContentPane().add(lblNewJgoodiesLabel, gbc_lblNewJgoodiesLabel);
 		
-		JLabel newPlayerTotalGames = DefaultComponentFactory.getInstance().createLabel("0");
+		final JLabel newPlayerTotalGames = DefaultComponentFactory.getInstance().createLabel("0");
 		newPlayerTotalGames.setToolTipText("New Total Games Played");
 		GridBagConstraints gbc_newPlayerTotalGames = new GridBagConstraints();
 		gbc_newPlayerTotalGames.insets = new Insets(0, 0, 5, 5);
@@ -393,7 +416,6 @@ public class ELOCalculatorGUI {
 		
 		opponentRating5 = new JTextField();
 		opponentRating5.setToolTipText("Opponent Rating");
-		opponentRating5.setText("0");
 		opponentRating5.setHorizontalAlignment(SwingConstants.CENTER);
 		opponentRating5.setColumns(5);
 		GridBagConstraints gbc_opponentRating5 = new GridBagConstraints();
@@ -402,34 +424,83 @@ public class ELOCalculatorGUI {
 		gbc_opponentRating5.gridy = 5;
 		frame.getContentPane().add(opponentRating5, gbc_opponentRating5);
 		
-		JRadioButton radioButton_7 = new JRadioButton("");
-		buttonGroup_4.add(radioButton_7);
+		final JRadioButton gameOutcome5Win = new JRadioButton("");
+		gameOutcome5Win.setActionCommand("1");
+		buttonGroup_5.add(gameOutcome5Win);
 		GridBagConstraints gbc_radioButton_7 = new GridBagConstraints();
 		gbc_radioButton_7.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_7.gridx = 6;
 		gbc_radioButton_7.gridy = 5;
-		frame.getContentPane().add(radioButton_7, gbc_radioButton_7);
+		frame.getContentPane().add(gameOutcome5Win, gbc_radioButton_7);
 		
-		JRadioButton radioButton_8 = new JRadioButton("");
-		buttonGroup_4.add(radioButton_8);
+		JRadioButton gameOutcome5Draw = new JRadioButton("");
+		gameOutcome5Draw.setActionCommand("1");
+		buttonGroup_5.add(gameOutcome5Draw);
 		GridBagConstraints gbc_radioButton_8 = new GridBagConstraints();
 		gbc_radioButton_8.insets = new Insets(0, 0, 5, 5);
 		gbc_radioButton_8.gridx = 7;
 		gbc_radioButton_8.gridy = 5;
-		frame.getContentPane().add(radioButton_8, gbc_radioButton_8);
+		frame.getContentPane().add(gameOutcome5Draw, gbc_radioButton_8);
 		
-		JRadioButton radioButton_9 = new JRadioButton("");
-		buttonGroup_4.add(radioButton_9);
+		final JRadioButton gameOutcome5Loss = new JRadioButton("");
+		gameOutcome5Loss.setActionCommand("1");
+		buttonGroup_5.add(gameOutcome5Loss);
 		GridBagConstraints gbc_radioButton_9 = new GridBagConstraints();
 		gbc_radioButton_9.insets = new Insets(0, 0, 5, 0);
 		gbc_radioButton_9.gridx = 8;
 		gbc_radioButton_9.gridy = 5;
-		frame.getContentPane().add(radioButton_9, gbc_radioButton_9);
+		frame.getContentPane().add(gameOutcome5Loss, gbc_radioButton_9);
 		
 		JButton btnCalculate = new JButton("Calculate");
 		btnCalculate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Player player = new Player(
+						Integer.parseInt(playerRating.getText())
+						, Integer.parseInt(playerWin.getText())
+						, Integer.parseInt(playerLoss.getText())
+						, Integer.parseInt(playerDraw.getText())
+				);
+				
+				// Process Opponents
+				// TODO whole section should loop instead
+				List<Integer> ratingsList = new ArrayList<Integer>();
+				if (opponentRating1.getText().trim().length() != 0) 
+					ratingsList.add(Integer.parseInt(opponentRating1.getText())); 
+				if (opponentRating2.getText().trim().length() != 0) 
+					ratingsList.add(Integer.parseInt(opponentRating2.getText()));
+				if (opponentRating3.getText().trim().length() != 0) 
+					ratingsList.add(Integer.parseInt(opponentRating3.getText()));
+				if (opponentRating4.getText().trim().length() != 0) 
+					ratingsList.add(Integer.parseInt(opponentRating4.getText()));
+				if (opponentRating5.getText().trim().length() != 0) 
+					ratingsList.add(Integer.parseInt(opponentRating5.getText()));
+				int[] opponentRatings = new int[ratingsList.size()];
+				for (int i = 0; i < opponentRatings.length; i++) {
+					opponentRatings[i] = ratingsList.get(i).intValue();
+				}
+				
+				int newWin = 0;
+				if (gameOutcome1Win == getSelection(buttonGroup_1)) newWin++;
+				if (gameOutcome2Win == getSelection(buttonGroup_2)) newWin++;
+				if (gameOutcome3Win == getSelection(buttonGroup_3)) newWin++;
+				if (gameOutcome4Win == getSelection(buttonGroup_4)) newWin++;
+				if (gameOutcome5Win == getSelection(buttonGroup_5)) newWin++;
+				
+				int newLoss = 0;
+				if (gameOutcome1Loss == getSelection(buttonGroup_1)) newLoss++;
+				if (gameOutcome2Loss == getSelection(buttonGroup_2)) newLoss++;
+				if (gameOutcome3Loss == getSelection(buttonGroup_3)) newLoss++;
+				if (gameOutcome4Loss == getSelection(buttonGroup_4)) newLoss++;
+				if (gameOutcome5Loss == getSelection(buttonGroup_5)) newLoss++;
+				
+				player.applyResults(opponentRatings, newWin, newLoss);
+				
+				newPlayerRating.setText(Integer.toString(player.getRating()));
+				newPlayerWin.setText(Integer.toString(player.getWin()));
+				newPlayerLoss.setText(Integer.toString(player.getLoss()));
+				newPlayerDraw.setText(Integer.toString(player.getDraw()));
+				newPlayerTotalGames.setText(Integer.toString(player.getTotalGames()));
 			}
 		});
 		GridBagConstraints gbc_btnCalculate = new GridBagConstraints();
@@ -445,4 +516,23 @@ public class ELOCalculatorGUI {
 		gbc_btnReset.gridy = 7;
 		frame.getContentPane().add(btnReset, gbc_btnReset);
 	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	
+	private static JRadioButton getSelection(ButtonGroup group) {
+		for (Enumeration e=group.getElements(); e.hasMoreElements();) {
+			JRadioButton b = (JRadioButton)e.nextElement();
+			if (b.getModel() == group.getSelection()) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
 }
