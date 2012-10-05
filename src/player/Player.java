@@ -135,7 +135,6 @@ public class Player {
 			s = s + (r.length - wNew - lNew)*0.5; 
 		double e = this.calcWinExpectancy(r);
 		double newRating = Math.round(this.rating + k*(s-e));
-		System.err.println(k + ":" + s + ":" + e + ":" + newRating + ":" + r.length);
 		return (int) newRating;
 	}
 	
