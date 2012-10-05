@@ -86,23 +86,20 @@ public class Player {
 	public int calcProvisionalRating(int r[], int wNew, int lNew) {
 		int m = r.length;
 		double rPost = ( 
-				this.getTotalGames()*this.rating 
-				+ m*this.averageArray(r)
-				+ (wNew - lNew)*400 
-				) / (this.getTotalGames()+m) ;
+					this.getTotalGames()*this.rating 
+					+ m*this.averageArray(r)
+					+ (wNew - lNew)*400 
+				) 
+				/ (this.getTotalGames()+m) ;
 		rPost = Math.round(rPost);
 		return (int) Math.max(100, (int) rPost); // can't have less than 100
 	}
 	
-	private int sumArray(int[] list) {
-		int total = 0;
-		for (int v: list) 
-			total = total + v;
-		return total;
-	}
-	
 	private double averageArray(int[] list) {
-		return (double) this.sumArray(list) / list.length;
+		int total = 0;
+		for (int i: list)
+			total = total + i;
+		return (double) total / list.length;
 	}
 
 	public void applyResults(int[] r, int wNew, int lNew) {
@@ -135,7 +132,7 @@ public class Player {
 			s = s + (r.length - wNew - lNew)*0.5; 
 		double e = this.calcWinExpectancy(r);
 		double newRating = Math.round(this.rating + k*(s-e));
-		return (int) newRating;
+		return (int) Math.max(100, newRating);
 	}
 	
 	public double calcWinExpectancy(int[] opponents) {

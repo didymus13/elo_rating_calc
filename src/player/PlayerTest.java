@@ -42,23 +42,31 @@ public class PlayerTest extends TestCase{
 	@Test
 	public void testProvisionalRating() {
 		Player newPlayer = new Player("Mr Test");
-		int[] opponents = {1000, 1100, 900};
-		int wins = 1;
-		int losses = 1;
-		
 		this.assertEquals(0, newPlayer.getTotalGames());
-		this.assertEquals(1000, newPlayer.calcProvisionalRating(opponents, wins, losses));
-		newPlayer.applyResults(opponents, wins, losses);
-		this.assertEquals(1, newPlayer.getWin());
-		this.assertEquals(1, newPlayer.getLoss());
-		this.assertEquals(1, newPlayer.getDraw());
-		this.assertEquals(3, newPlayer.getTotalGames());
-		this.assertEquals(1000, newPlayer.getRating());
 		
-		int[] opponents2 = {750, 1500};
-		newPlayer.applyResults(opponents2, 1, 0);
-		this.assertEquals(1130, newPlayer.getRating());
-		this.assertEquals(5, newPlayer.getTotalGames());
+		int[] opponents = {1000,};
+		
+		int wins = 1; // Check Win
+		int losses = 0;
+		this.assertEquals(1400, newPlayer.calcProvisionalRating(opponents, wins, losses));
+		
+		wins = 0; // Check Losses  
+		losses = 1;
+		this.assertEquals(600, newPlayer.calcProvisionalRating(opponents, wins, losses));
+		
+		wins = 0; // Check Draw  
+		losses = 0;
+		this.assertEquals(1000, newPlayer.calcProvisionalRating(opponents, wins, losses));
+		
+		int[] opponents2 = {750, 1500}; // check multiple
+		wins = 1;
+		losses = 0;
+		this.assertEquals(1325, newPlayer.calcProvisionalRating(opponents2, wins, losses));
+		
+		// Check update
+		newPlayer.applyResults(opponents2, wins, losses);
+		this.assertEquals(1325, newPlayer.getRating());
+		this.assertEquals(2, newPlayer.getTotalGames());
 	}
 	
 	@Test
