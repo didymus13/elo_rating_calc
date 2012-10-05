@@ -107,7 +107,7 @@ public class Player {
 
 	public void applyResults(int[] r, int wNew, int lNew) {
 		if (this.isEstablished() ) 
-			this.rating = 0;
+			this.rating = this.calcEffectiveRating(r, wNew, lNew);
 		else
 			this.rating = this.calcProvisionalRating(r, wNew, lNew);
 		this.win = this.win + wNew;
@@ -130,9 +130,12 @@ public class Player {
 	
 	public int calcEffectiveRating(int[] r, int wNew, int lNew) {
 		double k = this.calcK(this.calcEffectiveGames(), r.length);
-		double s = wNew + Math.abs(wNew - lNew)*0.5;
+		double s = wNew;
+		if (wNew + lNew != r.length) // calc Drawn games if any
+			s = s + (r.length - wNew - lNew)*0.5; 
 		double e = this.calcWinExpectancy(r);
 		double newRating = Math.round(this.rating + k*(s-e));
+		System.err.println(k + ":" + s + ":" + e + ":" + newRating + ":" + r.length);
 		return (int) newRating;
 	}
 	

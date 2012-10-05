@@ -455,6 +455,8 @@ public class ELOCalculatorGUI {
 		btnCalculate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
+				// Make player with pre-tournament stats
 				Player player = new Player(
 						Integer.parseInt(playerRating.getText())
 						, Integer.parseInt(playerWin.getText())

@@ -72,17 +72,39 @@ public class PlayerTest extends TestCase{
 	}
 	
 	@Test
+	public void testWinExpectancy() {
+		int[] opponents = {1000,};
+		this.assertEquals(0.5, this.player.calcWinExpectancy(opponents));
+		int[] opponents2 = {1500,};
+		this.assertEquals(0.05324021520202245, this.player.calcWinExpectancy(opponents2));
+		int[] opponents3 = {0,};
+		this.assertEquals(0.9968476908167399, this.player.calcWinExpectancy(opponents3));
+	}
+	
+	@Test
 	public void testEstablishedRating() {
 		this.assertTrue(this.player.isEstablished());
 		this.assertEquals(26, this.player.getTotalGames());
-		int[] opponents = {1000, 1000};
+		this.assertEquals(1000, this.player.getRating());
+		int[] opponents = {1000,};
+		// post-Win Rating
 		int win = 1;
-		int loss = 1;
-		this.assertEquals(1.0, this.player.calcWinExpectancy(opponents));
+		int loss = 0;
+		this.assertEquals(1029, this.player.calcEffectiveRating(opponents, win, loss));
+
+		// post-loss Rating
+		win = 0;
+		loss = 1;
+		this.assertEquals(971, this.player.calcEffectiveRating(opponents, win, loss));
+		
+		// post-draw Rating
+		win = 0;
+		loss = 0;
 		this.assertEquals(1000, this.player.calcEffectiveRating(opponents, win, loss));
 		
 		this.player.applyResults(opponents, win, loss);
-		
+		this.assertEquals(27, this.player.getTotalGames());
+		this.assertEquals(1000, this.player.getRating());
 	}
 	
 	@Test
