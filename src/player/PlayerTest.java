@@ -80,6 +80,15 @@ public class PlayerTest extends TestCase{
 	}
 	
 	@Test
+	public void testCalcBonus() {
+		double s = 3.5;
+		double e = 1.363;
+		double k = 38.89;
+		int m = 4;
+		this.assertEquals(63.107929999999996, this.player.calcBonus(m, k, s, e));
+	}
+	
+	@Test
 	public void testWinExpectancy() {
 		int[] opponents = {1000,};
 		this.assertEquals(0.5, this.player.calcWinExpectancy(opponents));

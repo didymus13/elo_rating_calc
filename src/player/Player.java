@@ -131,7 +131,8 @@ public class Player {
 		if (wNew + lNew != r.length) // calc Drawn games if any
 			s = s + (r.length - wNew - lNew)*0.5; 
 		double e = this.calcWinExpectancy(r);
-		double newRating = Math.round(this.rating + k*(s-e));
+		double b = this.calcBonus(r.length, k, s, e);
+		double newRating = Math.round(this.rating + k*(s-e) + b);
 		return (int) Math.max(100, newRating);
 	}
 	
@@ -141,6 +142,21 @@ public class Player {
 			we = we + (1 / (Math.pow((double) 1/10, (double) (this.rating - opponents[i])/400 ) +1) );
 		}
 		return we;
+	}
+
+	/**
+	 * @param m int number of games
+	 * @param k double calculated K value
+	 * @param s double calculated tournament score
+	 * @param e double calculated performance score estimate
+	 * @return int bonus value
+	 */
+	public double calcBonus(int m, double k, double s, double e) {
+		if (m < 3) 
+			return 0;
+		
+		double bonus = k*(s-e)-10*Math.sqrt(m);
+		return Math.max(0, bonus);
 	}
 
 }
